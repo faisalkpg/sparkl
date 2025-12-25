@@ -1,13 +1,91 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { Hero } from "@/components/Hero";
+import { ConfigurationForm } from "@/components/ConfigurationForm";
+import { GenerationProgress } from "@/components/GenerationProgress";
+import { PreviewPanel } from "@/components/PreviewPanel";
+import { WorksheetConfig, GeneratedWorksheet, Question } from "@/types/worksheet";
+import { generateWorksheet } from "@/utils/mockGeneration";
+import { generateQuestionPaperPDF, generateAnswerKeyPDF, downloadBothPDFs } from "@/utils/pdfGenerator";
+
+type AppState = "landing" | "configure" | "generating" | "preview";
 
 const Index = () => {
+  const [state, setState] = useState<AppState>("landing");
+  const [config, setConfig] = useState<WorksheetConfig | null>(null);
+  const [worksheet, setWorksheet] = useState<GeneratedWorksheet | null>(null);
+
+  const handleGetStarted = () => {
+    setState("configure");
+  };
+
+  const handleGenerate = async (newConfig: WorksheetConfig) => {
+    setConfig(newConfig);
+    setState("generating");
+    
+    try {
+      const generated = await generateWorksheet(newConfig);
+      setWorksheet(generated);
+      setState("preview");
+    } catch (error) {
+      console.error("Generation failed:", error);
+      setState("configure");
+    }
+  };
+
+  const handleRegenerate = () => {
+    setWorksheet(null);
+    setState("configure");
+  };
+
+  const handleDownload = async (type: 'questions' | 'answers' | 'both') => {
+    if (!worksheet) return;
+
+    switch (type) {
+      case 'questions':
+        await generateQuestionPaperPDF(worksheet);
+        break;
+      case 'answers':
+        await generateAnswerKeyPDF(worksheet);
+        break;
+      case 'both':
+        await downloadBothPDFs(worksheet);
+        break;
+    }
+  };
+
+  const handleUpdateQuestions = (questions: Question[]) => {
+    if (worksheet) {
+      setWorksheet({ ...worksheet, questions });
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <main className="min-h-screen bg-background">
+      {state === "landing" && <Hero onGetStarted={handleGetStarted} />}
+      
+      {state === "configure" && (
+        <ConfigurationForm
+          onGenerate={handleGenerate}
+          isGenerating={false}
+        />
+      )}
+      
+      {state === "generating" && config && (
+        <GenerationProgress
+          subject={config.subject}
+          numQuestions={config.numQuestions}
+        />
+      )}
+      
+      {state === "preview" && worksheet && (
+        <PreviewPanel
+          worksheet={worksheet}
+          onRegenerate={handleRegenerate}
+          onDownload={handleDownload}
+          onUpdateQuestions={handleUpdateQuestions}
+        />
+      )}
+    </main>
   );
 };
 
