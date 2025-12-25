@@ -4,7 +4,7 @@ import { ConfigurationForm } from "@/components/ConfigurationForm";
 import { GenerationProgress } from "@/components/GenerationProgress";
 import { PreviewPanel } from "@/components/PreviewPanel";
 import { WorksheetConfig, GeneratedWorksheet, Question } from "@/types/worksheet";
-import { generateWorksheet } from "@/utils/mockGeneration";
+import { generateWorksheet } from "@/utils/worksheetGeneration";
 import { generateQuestionPaperPDF, generateAnswerKeyPDF, downloadBothPDFs } from "@/utils/pdfGenerator";
 
 type AppState = "landing" | "configure" | "generating" | "preview";
