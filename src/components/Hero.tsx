@@ -1,11 +1,15 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { FileText, Sparkles, Download, Clock } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface HeroProps {
   onGetStarted: () => void;
 }
 
 export function Hero({ onGetStarted }: HeroProps) {
+  const { user } = useAuth();
+
   return (
     <section className="relative min-h-screen gradient-hero overflow-hidden">
       {/* Background decoration */}
