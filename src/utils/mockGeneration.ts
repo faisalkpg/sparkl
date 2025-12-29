@@ -1,5 +1,39 @@
 import { WorksheetConfig, Question, GeneratedWorksheet } from "@/types/worksheet";
 
+// Exported constants for use in other components
+export const GRADES = [
+  { id: 'grade-1', label: 'Grade 1' },
+  { id: 'grade-2', label: 'Grade 2' },
+  { id: 'grade-3', label: 'Grade 3' },
+  { id: 'grade-4', label: 'Grade 4' },
+  { id: 'grade-5', label: 'Grade 5' },
+  { id: 'grade-6', label: 'Grade 6' },
+  { id: 'grade-7', label: 'Grade 7' },
+  { id: 'grade-8', label: 'Grade 8' },
+  { id: 'grade-9', label: 'Grade 9' },
+  { id: 'grade-10', label: 'Grade 10' },
+  { id: 'grade-11', label: 'Grade 11' },
+  { id: 'grade-12', label: 'Grade 12' },
+];
+
+export const SUBJECTS = [
+  { id: 'Mathematics', label: 'Mathematics' },
+  { id: 'Science', label: 'Science' },
+  { id: 'English', label: 'English' },
+  { id: 'Social Studies', label: 'Social Studies' },
+  { id: 'Arabic', label: 'Arabic' },
+  { id: 'Hindi', label: 'Hindi' },
+  { id: 'Urdu', label: 'Urdu' },
+  { id: 'Business Studies', label: 'Business Studies' },
+];
+
+export const DIFFICULTY_LEVELS = [
+  { id: 'easy', label: 'Easy' },
+  { id: 'medium', label: 'Medium' },
+  { id: 'hard', label: 'Hard' },
+  { id: 'mixed', label: 'Mixed' },
+];
+
 const questionTemplates: Record<string, { short: string[]; long: string[] }> = {
   Mathematics: {
     short: [
